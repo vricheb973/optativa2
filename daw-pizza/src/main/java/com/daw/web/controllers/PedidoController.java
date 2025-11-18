@@ -51,18 +51,18 @@ public class PedidoController {
 //		}
 	}
 	
-	@PutMapping("/{idPedido}")
-	public ResponseEntity<?> update(@PathVariable int idPedido, @RequestBody Pedido pedido){
-		try {
-			return ResponseEntity.ok(this.pedidoService.update(idPedido, pedido));
-		}
-		catch(PedidoNotFoundException ex) {
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
-		}
-		catch(PedidoException ex) {
-			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
-		}
-	}
+//	@PutMapping("/{idPedido}")
+//	public ResponseEntity<?> update(@PathVariable int idPedido, @RequestBody Pedido pedido){
+//		try {
+//			return ResponseEntity.ok(this.pedidoService.update(idPedido, pedido));
+//		}
+//		catch(PedidoNotFoundException ex) {
+//			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
+//		}
+//		catch(PedidoException ex) {
+//			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
+//		}
+//	}
 	
 	@DeleteMapping("/{idPedido}")
 	public ResponseEntity<?> delete(@PathVariable int idPedido){

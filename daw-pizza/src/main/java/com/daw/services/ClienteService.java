@@ -21,7 +21,7 @@ public class ClienteService {
 	}
 	
 	public Cliente findById(int idCliente) {
-		if(this.clienteRepository.existsById(idCliente)) {
+		if(!this.clienteRepository.existsById(idCliente)) {
 			throw new ClienteNotFoundException("El ID indicado no existe. ");
 		}
 		

@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.daw.persistence.entities.PizzaPedido;
 import com.daw.persistence.repositories.PizzaPedidoRepository;
+import com.daw.services.exceptions.PizzaPedidoNotFoundException;
 
 @Service
 public class PizzaPedidoService {
@@ -16,6 +17,14 @@ public class PizzaPedidoService {
 	
 	public List<PizzaPedido> findAll(){
 		return this.pizzaPedidoRepository.findAll();
+	}
+	
+	public PizzaPedido findById(int idPizzaPedido) {
+		if(!this.pizzaPedidoRepository.existsById(idPizzaPedido)) {
+			throw new PizzaPedidoNotFoundException("El ID indicado no existe. ");
+		}
+		
+		return this.pizzaPedidoRepository.findById(idPizzaPedido).get();
 	}
 	
 }
