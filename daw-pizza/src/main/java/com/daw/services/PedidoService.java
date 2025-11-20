@@ -17,8 +17,8 @@ public class PedidoService {
 	@Autowired
 	private PedidoRepository pedidoRepository;	
 	
-	public List<Pedido> findAll(){
-		return this.pedidoRepository.findAll();
+	public List<PedidoDTO> findAll(){
+		return PedidoMapper.toDTOsFuncional(this.pedidoRepository.findAll());
 	}
 	
 	public PedidoDTO findById(int idPedido) {

@@ -9,14 +9,13 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.daw.persistence.entities.Pedido;
 import com.daw.services.PedidoService;
-import com.daw.services.exceptions.PedidoException;
+import com.daw.services.dto.PedidoDTO;
 import com.daw.services.exceptions.PedidoNotFoundException;
 
 @RestController
@@ -27,7 +26,7 @@ public class PedidoController {
 	private PedidoService pedidoService;
 	
 	@GetMapping
-	public ResponseEntity<List<Pedido>> list(){
+	public ResponseEntity<List<PedidoDTO>> list(){
 		return ResponseEntity.ok(this.pedidoService.findAll());
 	}
 	
