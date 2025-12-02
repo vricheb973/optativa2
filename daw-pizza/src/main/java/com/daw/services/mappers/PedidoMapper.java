@@ -1,7 +1,6 @@
 package com.daw.services.mappers;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -45,7 +44,6 @@ public class PedidoMapper {
 	public static List<PedidoDTO> toDTOsFuncional(List<Pedido> pedidos){
 		return pedidos.stream()
 				.map(ped -> PedidoMapper.toDTO(ped))
-				.sorted((p1, p2) -> Double.compare(p2.getTotal(), p1.getTotal()))
 				.collect(Collectors.toList());
 	}
 	

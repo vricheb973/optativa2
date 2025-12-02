@@ -18,22 +18,17 @@ import com.daw.services.exceptions.PizzaPedidoNotFoundException;
 @RequestMapping("/pizzaPedidos")
 public class PizzaPedidoController {
 
-	@Autowired
-	private PizzaPedidoService pizzaPedidoService;
 	
-	@GetMapping
-	public ResponseEntity<List<PizzaPedido>> list(){
-		return ResponseEntity.ok(this.pizzaPedidoService.findAll());
-	}
+
 	
-	@GetMapping("/{idPizzaPedido}")
-	public ResponseEntity<?> findById(@PathVariable int idPizzaPedido){
-		try {
-			return ResponseEntity.ok(this.pizzaPedidoService.findById(idPizzaPedido));
-		}
-		catch(PizzaPedidoNotFoundException ex) {
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
-		}
-	}
+//	@GetMapping("/{idPizzaPedido}")
+//	public ResponseEntity<?> findById(@PathVariable int idPizzaPedido){
+//		try {
+//			return ResponseEntity.ok(this.pizzaPedidoService.findById(idPizzaPedido));
+//		}
+//		catch(PizzaPedidoNotFoundException ex) {
+//			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
+//		}
+//	}
 	
 }

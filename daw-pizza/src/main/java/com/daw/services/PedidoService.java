@@ -17,6 +17,9 @@ public class PedidoService {
 	@Autowired
 	private PedidoRepository pedidoRepository;	
 	
+	@Autowired
+	private PizzaPedidoService pizzaPedidoService;
+	
 	public List<PedidoDTO> findAll(){
 		return PedidoMapper.toDTOsFuncional(this.pedidoRepository.findAll());
 	}
@@ -29,22 +32,30 @@ public class PedidoService {
 		return PedidoMapper.toDTO(this.pedidoRepository.findById(idPedido).get());
 	}
 	
-	public Pedido create(Pedido pedido) {
-		pedido.setId(0);
+	public Pedido findEntityById(int idPedido) {
+		if(!this.pedidoRepository.existsById(idPedido)) {
+			throw new ClienteNotFoundException("El ID indicado no existe. ");
+		}
 		
-		return this.pedidoRepository.save(pedido);
+		return this.pedidoRepository.findById(idPedido).get();
 	}
 	
-//	public Pedido update(int idPedido, Pedido pedido) {
-//		Pedido pedidoBD = this.findById(idPedido);
-//		pedidoBD.setIdCliente(pedido.getIdCliente());
-//		pedidoBD.setFecha(pedido.getFecha());
-//		pedidoBD.setTotal(pedido.getTotal());
-//		pedidoBD.setMetodo(pedido.getMetodo());
-//		pedidoBD.setNotas(pedido.getNotas());
-//		
-//		return this.pedidoRepository.save(pedido);
-//	}
+	public PedidoDTO create(Pedido pedido) {
+		pedido.setId(0);
+		
+		return PedidoMapper.toDTO(this.pedidoRepository.save(pedido));
+	}
+	
+	public PedidoDTO update(int idPedido, Pedido pedido) {
+		Pedido pedidoBD = this.findEntityById(idPedido);
+		pedidoBD.setIdCliente(pedido.getIdCliente());
+		pedidoBD.setFecha(pedido.getFecha());
+		pedidoBD.setTotal(pedido.getTotal());
+		pedidoBD.setMetodo(pedido.getMetodo());
+		pedidoBD.setNotas(pedido.getNotas());
+		
+		return PedidoMapper.toDTO(this.pedidoRepository.save(pedido));
+	}
 	
 	public void deleteById(int idPedido) {
 		if(!this.pedidoRepository.existsById(idPedido)) {
