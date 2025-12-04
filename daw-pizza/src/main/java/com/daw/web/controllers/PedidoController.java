@@ -91,10 +91,10 @@ public class PedidoController {
 	}
 	
 	//findById
-	@GetMapping
+	@GetMapping("/{idPedido}/pizzas/{idPizzaPedido}")
 	public ResponseEntity<?> findPizzaPedidoById(@PathVariable int idPedido, @PathVariable int idPizzaPedido){
 		try {
-			return ResponseEntity.ok(this.pedidoService.findPizzasByIdPedido(idPedido));
+			return ResponseEntity.ok(this.pedidoService.findPizzaPedidoById(idPedido, idPizzaPedido));
 		}
 		catch(PedidoNotFoundException ex) {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
