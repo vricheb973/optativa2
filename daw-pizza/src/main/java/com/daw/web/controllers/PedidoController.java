@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.daw.persistence.entities.Pedido;
+import com.daw.persistence.entities.PizzaPedido;
 import com.daw.services.PedidoService;
 import com.daw.services.dto.PedidoDTO;
 import com.daw.services.exceptions.PedidoException;
@@ -79,7 +80,7 @@ public class PedidoController {
 	
 	//CRUDs de PizzaPedido
 	//findAll
-	@GetMapping("/{pedidoId}/pizzas")
+	@GetMapping("/{idPedido}/pizzas")
 	public ResponseEntity<?> listPizzaPedido(@PathVariable int idPedido){
 		try {
 			return ResponseEntity.ok(this.pedidoService.findPizzasByIdPedido(idPedido));
@@ -90,11 +91,47 @@ public class PedidoController {
 	}
 	
 	//findById
-	
+	@GetMapping
+	public ResponseEntity<?> findPizzaPedidoById(@PathVariable int idPedido, @PathVariable int idPizzaPedido){
+		try {
+			return ResponseEntity.ok(this.pedidoService.findPizzasByIdPedido(idPedido));
+		}
+		catch(PedidoNotFoundException ex) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
+		}
+	}
 	
 	//create
+	@PostMapping("/{idPedido}/pizzas")
+	public ResponseEntity<?> create(@PathVariable int idPedido, @RequestBody PizzaPedido pizzaPedido){
+		try {
+			return ResponseEntity.status(HttpStatus.CREATED).body(this.pedidoService.createPizzaPedido(idPedido, pizzaPedido));
+		}
+		catch(PedidoNotFoundException ex) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
+		}
+	}
 	//update
+	@PutMapping("/{idPedido}/pizzas/{idPizzaPedido}")
+	public ResponseEntity<?> update(@PathVariable int idPedido, @PathVariable int idPizzaPedido, @RequestBody PizzaPedido pizzaPedido){
+		try {
+			return ResponseEntity.status(HttpStatus.CREATED).body(this.pedidoService.updatePizzaPedido(idPedido, idPizzaPedido, pizzaPedido));
+		}
+		catch(PedidoNotFoundException ex) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
+		}
+	}
 	//delete
+	@DeleteMapping("/{idPedido}/pizzas/{idPizzaPedido}")
+	public ResponseEntity<?> delete(@PathVariable int idPedido, @PathVariable int idPizzaPedido){
+		try {
+			this.pedidoService.deletePizzaPedidoById(idPedido, idPizzaPedido);
+			return ResponseEntity.ok().build();
+		}
+		catch(PedidoNotFoundException ex) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
+		}
+	}
 	
 	
 	

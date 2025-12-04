@@ -64,4 +64,32 @@ public class PizzaPedidoService {
 		return PizzaPedidoMapper.toDtos(this.pizzaPedidoRepository.findByIdPedido(idPedido));
 	}
 	
+	public PizzaPedidoOutputDTO findDTOById(int idPizzaPedido) {
+		if(!this.pizzaPedidoRepository.existsById(idPizzaPedido)) {
+			throw new PizzaPedidoNotFoundException("El ID indicado no existe. ");
+		}
+		
+		return PizzaPedidoMapper.toDTO(this.pizzaPedidoRepository.findById(idPizzaPedido).get());
+	}
+	
+	public PizzaPedidoOutputDTO createDTO(PizzaPedido pizzaPedido) {
+		pizzaPedido.setId(0);
+		
+		return PizzaPedidoMapper.toDTO(this.pizzaPedidoRepository.save(pizzaPedido));
+	}
+	
+	public PizzaPedidoOutputDTO updateDTO(int idPizzaPedido, PizzaPedido pizzaPedido) {
+		if(idPizzaPedido != pizzaPedido.getId()) {
+			throw new PizzaPedidoNotFoundException("El ID del path y del body no coinciden. ");
+		}
+		
+		PizzaPedido pizzaPedidoBD = this.findById(idPizzaPedido);
+		pizzaPedidoBD.setIdPedido(pizzaPedido.getIdPedido());
+		pizzaPedidoBD.setIdPizza(pizzaPedido.getIdPizza());
+		pizzaPedidoBD.setPrecio(pizzaPedido.getPrecio());
+		pizzaPedidoBD.setCantidad(pizzaPedido.getCantidad());
+		
+		return PizzaPedidoMapper.toDTO(this.pizzaPedidoRepository.save(pizzaPedidoBD));
+	}
+	
 }

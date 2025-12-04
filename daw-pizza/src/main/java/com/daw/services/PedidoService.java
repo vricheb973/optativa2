@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.daw.persistence.entities.Pedido;
+import com.daw.persistence.entities.PizzaPedido;
 import com.daw.persistence.repositories.PedidoRepository;
 import com.daw.services.dto.PedidoDTO;
 import com.daw.services.dto.PizzaPedidoOutputDTO;
@@ -17,37 +18,37 @@ import com.daw.services.mappers.PedidoMapper;
 public class PedidoService {
 
 	@Autowired
-	private PedidoRepository pedidoRepository;	
-	
+	private PedidoRepository pedidoRepository;
+
 	@Autowired
 	private PizzaPedidoService pizzaPedidoService;
-	
-	public List<PedidoDTO> findAll(){
+
+	public List<PedidoDTO> findAll() {
 		return PedidoMapper.toDTOsFuncional(this.pedidoRepository.findAll());
 	}
-	
+
 	public PedidoDTO findById(int idPedido) {
-		if(!this.pedidoRepository.existsById(idPedido)) {
+		if (!this.pedidoRepository.existsById(idPedido)) {
 			throw new ClienteNotFoundException("El ID indicado no existe. ");
 		}
-		
+
 		return PedidoMapper.toDTO(this.pedidoRepository.findById(idPedido).get());
 	}
-	
+
 	public Pedido findEntityById(int idPedido) {
-		if(!this.pedidoRepository.existsById(idPedido)) {
+		if (!this.pedidoRepository.existsById(idPedido)) {
 			throw new ClienteNotFoundException("El ID indicado no existe. ");
 		}
-		
+
 		return this.pedidoRepository.findById(idPedido).get();
 	}
-	
+
 	public PedidoDTO create(Pedido pedido) {
 		pedido.setId(0);
-		
+
 		return PedidoMapper.toDTO(this.pedidoRepository.save(pedido));
 	}
-	
+
 	public PedidoDTO update(int idPedido, Pedido pedido) {
 		Pedido pedidoBD = this.findEntityById(idPedido);
 		pedidoBD.setIdCliente(pedido.getIdCliente());
@@ -55,33 +56,61 @@ public class PedidoService {
 		pedidoBD.setTotal(pedido.getTotal());
 		pedidoBD.setMetodo(pedido.getMetodo());
 		pedidoBD.setNotas(pedido.getNotas());
-		
+
 		return PedidoMapper.toDTO(this.pedidoRepository.save(pedido));
 	}
-	
+
 	public void deleteById(int idPedido) {
-		if(!this.pedidoRepository.existsById(idPedido)) {
+		if (!this.pedidoRepository.existsById(idPedido)) {
 			throw new ClienteNotFoundException("El ID indicado no existe. ");
 		}
-		
+
 		this.pedidoRepository.deleteById(idPedido);
 	}
-	
-	//CRUDs PizzaPedido
+
+	// CRUDs PizzaPedido
 	// findAll
-	public List<PizzaPedidoOutputDTO> findPizzasByIdPedido(int idPedido){
-		if(!this.pedidoRepository.existsById(idPedido)) {
+	public List<PizzaPedidoOutputDTO> findPizzasByIdPedido(int idPedido) {
+		if (!this.pedidoRepository.existsById(idPedido)) {
 			throw new PedidoNotFoundException("El ID indicado no existe. ");
 		}
-		
+
 		return this.pizzaPedidoService.findByIdPedido(idPedido);
 	}
-	
+
 	// findById
-	//create
-	//update
-	//delete
-	
-	
-	
+	public PizzaPedidoOutputDTO findPizzaPedidoById(int idPedido, int idPizzaPedido) {
+		if (!this.pedidoRepository.existsById(idPedido)) {
+			throw new PedidoNotFoundException("El ID indicado no existe. ");
+		}
+
+		return this.pizzaPedidoService.findDTOById(idPizzaPedido);
+	}
+
+	// create
+	public PizzaPedidoOutputDTO createPizzaPedido(int idPedido, PizzaPedido pizzaPedido) {
+		if (!this.pedidoRepository.existsById(idPedido)) {
+			throw new PedidoNotFoundException("El ID indicado no existe. ");
+		}
+
+		return this.pizzaPedidoService.createDTO(pizzaPedido);
+	}
+
+	// update
+	public PizzaPedidoOutputDTO updatePizzaPedido(int idPedido, int idPizzaPedido, PizzaPedido pizzaPedido) {
+		if (!this.pedidoRepository.existsById(idPedido)) {
+			throw new PedidoNotFoundException("El ID indicado no existe. ");
+		}
+
+		return this.pizzaPedidoService.updateDTO(idPizzaPedido, pizzaPedido);
+	}
+	// delete
+	public void deletePizzaPedidoById(int idPedido, int idPizzaPedido) {
+		if (!this.pedidoRepository.existsById(idPedido)) {
+			throw new ClienteNotFoundException("El ID indicado no existe. ");
+		}
+
+		this.pizzaPedidoService.deleteById(idPizzaPedido);
+	}
+
 }
