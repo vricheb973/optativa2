@@ -8,7 +8,9 @@ import org.springframework.stereotype.Service;
 import com.daw.persistence.entities.Pedido;
 import com.daw.persistence.repositories.PedidoRepository;
 import com.daw.services.dto.PedidoDTO;
+import com.daw.services.dto.PizzaPedidoOutputDTO;
 import com.daw.services.exceptions.ClienteNotFoundException;
+import com.daw.services.exceptions.PedidoNotFoundException;
 import com.daw.services.mappers.PedidoMapper;
 
 @Service
@@ -64,5 +66,22 @@ public class PedidoService {
 		
 		this.pedidoRepository.deleteById(idPedido);
 	}
+	
+	//CRUDs PizzaPedido
+	// findAll
+	public List<PizzaPedidoOutputDTO> findPizzasByIdPedido(int idPedido){
+		if(!this.pedidoRepository.existsById(idPedido)) {
+			throw new PedidoNotFoundException("El ID indicado no existe. ");
+		}
+		
+		return this.pizzaPedidoService.findByIdPedido(idPedido);
+	}
+	
+	// findById
+	//create
+	//update
+	//delete
+	
+	
 	
 }

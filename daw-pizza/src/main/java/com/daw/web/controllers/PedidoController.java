@@ -15,9 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.daw.persistence.entities.Pedido;
-import com.daw.persistence.entities.PizzaPedido;
 import com.daw.services.PedidoService;
-import com.daw.services.PizzaPedidoService;
 import com.daw.services.dto.PedidoDTO;
 import com.daw.services.exceptions.PedidoException;
 import com.daw.services.exceptions.PedidoNotFoundException;
@@ -28,9 +26,6 @@ public class PedidoController {
 
 	@Autowired
 	private PedidoService pedidoService;
-
-	@Autowired
-	private PizzaPedidoService pizzaPedidoService;
 	
 	//CRUDs de Pedido
 	@GetMapping
@@ -85,20 +80,17 @@ public class PedidoController {
 	//CRUDs de PizzaPedido
 	//findAll
 	@GetMapping("/{pedidoId}/pizzas")
-	public ResponseEntity<List<PizzaPedido>> listPizzaPedido(@PathVariable int idPedido){
-		return ResponseEntity.ok(this.pizzaPedidoService.findByIdPedido(idPedido));
-	}
-	
-	//findById
-	@GetMapping("/{pedidoId}/pizzas/{idPizzaPedido}")
-	public ResponseEntity<?> findById(@PathVariable int idPedido, @PathVariable int idPizzaPedido){
+	public ResponseEntity<?> listPizzaPedido(@PathVariable int idPedido){
 		try {
-			return ResponseEntity.ok(this.pedidoService.findById(idPedido));
+			return ResponseEntity.ok(this.pedidoService.findPizzasByIdPedido(idPedido));
 		}
 		catch(PedidoNotFoundException ex) {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
 		}
 	}
+	
+	//findById
+	
 	
 	//create
 	//update

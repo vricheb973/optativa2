@@ -6,19 +6,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.daw.persistence.entities.PizzaPedido;
-import com.daw.persistence.repositories.PedidoRepository;
 import com.daw.persistence.repositories.PizzaPedidoRepository;
+import com.daw.services.dto.PizzaPedidoOutputDTO;
 import com.daw.services.exceptions.PizzaNotFoundException;
 import com.daw.services.exceptions.PizzaPedidoNotFoundException;
+import com.daw.services.mappers.PizzaPedidoMapper;
 
 @Service
 public class PizzaPedidoService {
 
 	@Autowired
 	private PizzaPedidoRepository pizzaPedidoRepository;
-	
-	@Autowired
-	private PedidoService pedidoService;
 	
 	public List<PizzaPedido> findAll(){
 		return this.pizzaPedidoRepository.findAll();
@@ -62,12 +60,8 @@ public class PizzaPedidoService {
 	
 	//CRUDs Controller Pedido
 	//findAll de PizzaPedido
-	public List<PizzaPedido> findByIdPedido(int idPedido){
-		if(!this.pizzaPedidoRepository.existsById(idPizzaPedido)) {
-			throw new PizzaNotFoundException("El ID indicado no existe. ");
-		}
-		
-		return this.pizzaPedidoRepository.findByIdPedido(idPedido);
+	public List<PizzaPedidoOutputDTO> findByIdPedido(int idPedido){
+		return PizzaPedidoMapper.toDtos(this.pizzaPedidoRepository.findByIdPedido(idPedido));
 	}
 	
 }
