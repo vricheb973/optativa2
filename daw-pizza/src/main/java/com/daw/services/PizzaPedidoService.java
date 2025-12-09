@@ -5,8 +5,10 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.daw.persistence.entities.Pizza;
 import com.daw.persistence.entities.PizzaPedido;
 import com.daw.persistence.repositories.PizzaPedidoRepository;
+import com.daw.services.dto.PizzaPedidoInputDTO;
 import com.daw.services.dto.PizzaPedidoOutputDTO;
 import com.daw.services.exceptions.PizzaNotFoundException;
 import com.daw.services.exceptions.PizzaPedidoNotFoundException;
@@ -17,6 +19,9 @@ public class PizzaPedidoService {
 
 	@Autowired
 	private PizzaPedidoRepository pizzaPedidoRepository;
+	
+	@Autowired
+	private PizzaService pizzaService;
 	
 	public List<PizzaPedido> findAll(){
 		return this.pizzaPedidoRepository.findAll();
@@ -72,10 +77,19 @@ public class PizzaPedidoService {
 		return PizzaPedidoMapper.toDTO(this.pizzaPedidoRepository.findById(idPizzaPedido).get());
 	}
 	
-	public PizzaPedidoOutputDTO createDTO(PizzaPedido pizzaPedido) {
-		pizzaPedido.setId(0);
+	public PizzaPedidoOutputDTO createDTO(PizzaPedidoInputDTO dto) {	
+		PizzaPedido entity = PizzaPedidoMapper.toEntity(dto);
+		entity.setId(0);
 		
-		return PizzaPedidoMapper.toDTO(this.pizzaPedidoRepository.save(pizzaPedido));
+		Pizza pizza = this.pizzaService.findById(entity.getIdPizza());
+		entity.setPrecio(entity.getCantidad() * pizza.getPrecio());
+		
+		//Cuando ejecutamos el save, no vienen las entidades relacionadas (pizza y pedido), por lo que
+		//tenemos que ponersela para que no lance un NullPointerException en el Mapper cuando queramos
+		//hacer pizzaPedido.getPizza().getNombre()
+		entity.setPizza(pizza);
+		
+		return PizzaPedidoMapper.toDTO(this.pizzaPedidoRepository.save(entity));
 	}
 	
 	public PizzaPedidoOutputDTO updateDTO(int idPizzaPedido, PizzaPedido pizzaPedido) {

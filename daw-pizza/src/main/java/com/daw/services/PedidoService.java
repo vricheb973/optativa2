@@ -9,6 +9,7 @@ import com.daw.persistence.entities.Pedido;
 import com.daw.persistence.entities.PizzaPedido;
 import com.daw.persistence.repositories.PedidoRepository;
 import com.daw.services.dto.PedidoDTO;
+import com.daw.services.dto.PizzaPedidoInputDTO;
 import com.daw.services.dto.PizzaPedidoOutputDTO;
 import com.daw.services.exceptions.ClienteNotFoundException;
 import com.daw.services.exceptions.PedidoNotFoundException;
@@ -88,12 +89,12 @@ public class PedidoService {
 	}
 
 	// create
-	public PizzaPedidoOutputDTO createPizzaPedido(int idPedido, PizzaPedido pizzaPedido) {
+	public PizzaPedidoOutputDTO createPizzaPedido(int idPedido, PizzaPedidoInputDTO dto) {
 		if (!this.pedidoRepository.existsById(idPedido)) {
 			throw new PedidoNotFoundException("El ID indicado no existe. ");
 		}
 
-		return this.pizzaPedidoService.createDTO(pizzaPedido);
+		return this.pizzaPedidoService.createDTO(dto);
 	}
 
 	// update
@@ -104,6 +105,7 @@ public class PedidoService {
 
 		return this.pizzaPedidoService.updateDTO(idPizzaPedido, pizzaPedido);
 	}
+	
 	// delete
 	public void deletePizzaPedidoById(int idPedido, int idPizzaPedido) {
 		if (!this.pedidoRepository.existsById(idPedido)) {

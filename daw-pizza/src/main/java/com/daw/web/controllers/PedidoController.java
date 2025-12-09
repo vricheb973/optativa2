@@ -18,6 +18,7 @@ import com.daw.persistence.entities.Pedido;
 import com.daw.persistence.entities.PizzaPedido;
 import com.daw.services.PedidoService;
 import com.daw.services.dto.PedidoDTO;
+import com.daw.services.dto.PizzaPedidoInputDTO;
 import com.daw.services.exceptions.PedidoException;
 import com.daw.services.exceptions.PedidoNotFoundException;
 
@@ -103,9 +104,9 @@ public class PedidoController {
 	
 	//create
 	@PostMapping("/{idPedido}/pizzas")
-	public ResponseEntity<?> create(@PathVariable int idPedido, @RequestBody PizzaPedido pizzaPedido){
+	public ResponseEntity<?> create(@PathVariable int idPedido, @RequestBody PizzaPedidoInputDTO dto){
 		try {
-			return ResponseEntity.status(HttpStatus.CREATED).body(this.pedidoService.createPizzaPedido(idPedido, pizzaPedido));
+			return ResponseEntity.status(HttpStatus.CREATED).body(this.pedidoService.createPizzaPedido(idPedido, dto));
 		}
 		catch(PedidoNotFoundException ex) {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
