@@ -92,16 +92,20 @@ public class PizzaPedidoService {
 		return PizzaPedidoMapper.toDTO(this.pizzaPedidoRepository.save(entity));
 	}
 	
-	public PizzaPedidoOutputDTO updateDTO(int idPizzaPedido, PizzaPedido pizzaPedido) {
-		if(idPizzaPedido != pizzaPedido.getId()) {
+	public PizzaPedidoOutputDTO updateDTO(int idPizzaPedido, PizzaPedidoInputDTO dto) {
+		if(idPizzaPedido != dto.getId()) {
 			throw new PizzaPedidoNotFoundException("El ID del path y del body no coinciden. ");
 		}
 		
-		PizzaPedido pizzaPedidoBD = this.findById(idPizzaPedido);
-		pizzaPedidoBD.setIdPedido(pizzaPedido.getIdPedido());
-		pizzaPedidoBD.setIdPizza(pizzaPedido.getIdPizza());
-		pizzaPedidoBD.setPrecio(pizzaPedido.getPrecio());
-		pizzaPedidoBD.setCantidad(pizzaPedido.getCantidad());
+		PizzaPedido pizzaPedidoBD = this.findById(dto.getId());
+		pizzaPedidoBD.setIdPedido(dto.getIdPedido());
+		pizzaPedidoBD.setIdPizza(dto.getIdPizza());
+		pizzaPedidoBD.setCantidad(dto.getCantidad());
+		
+		Pizza pizza = this.pizzaService.findById(dto.getIdPizza());
+		pizzaPedidoBD.setPrecio(dto.getCantidad() * pizza.getPrecio());
+		
+		pizzaPedidoBD.setPizza(pizza);
 		
 		return PizzaPedidoMapper.toDTO(this.pizzaPedidoRepository.save(pizzaPedidoBD));
 	}

@@ -98,12 +98,12 @@ public class PedidoService {
 	}
 
 	// update
-	public PizzaPedidoOutputDTO updatePizzaPedido(int idPedido, int idPizzaPedido, PizzaPedido pizzaPedido) {
+	public PizzaPedidoOutputDTO updatePizzaPedido(int idPedido, int idPizzaPedido, PizzaPedidoInputDTO dto) {
 		if (!this.pedidoRepository.existsById(idPedido)) {
 			throw new PedidoNotFoundException("El ID indicado no existe. ");
 		}
 
-		return this.pizzaPedidoService.updateDTO(idPizzaPedido, pizzaPedido);
+		return this.pizzaPedidoService.updateDTO(idPizzaPedido, dto);
 	}
 	
 	// delete
@@ -113,6 +113,17 @@ public class PedidoService {
 		}
 
 		this.pizzaPedidoService.deleteById(idPizzaPedido);
+	}
+	
+	//Funciones auxiliares
+	public void recalcularTotal(Pedido pedido) {
+		double total = 0.0;
+		
+		for(PizzaPedidoOutputDTO pp : this.pizzaPedidoService.findByIdPedido(pedido.getId())) {
+			total += pp.getPrecio();
+		}
+		
+		pedido.setTotal(total);
 	}
 
 }

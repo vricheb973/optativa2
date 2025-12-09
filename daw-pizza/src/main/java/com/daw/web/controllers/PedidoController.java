@@ -114,7 +114,7 @@ public class PedidoController {
 	}
 	//update
 	@PutMapping("/{idPedido}/pizzas/{idPizzaPedido}")
-	public ResponseEntity<?> update(@PathVariable int idPedido, @PathVariable int idPizzaPedido, @RequestBody PizzaPedido pizzaPedido){
+	public ResponseEntity<?> update(@PathVariable int idPedido, @PathVariable int idPizzaPedido, @RequestBody PizzaPedidoInputDTO pizzaPedido){
 		try {
 			return ResponseEntity.status(HttpStatus.CREATED).body(this.pedidoService.updatePizzaPedido(idPedido, idPizzaPedido, pizzaPedido));
 		}
