@@ -12,7 +12,7 @@ INSERT INTO cliente (nombre, direccion, email, telefono) VALUES
 ('Elena Martín', 'Calle Sur 21', 'elena.martin@mail.com', '600111231');
 
 -- Inserciones en la tabla pizza
-INSERT INTO pizza (nombre, descripcion, precio, disponible, vegana, vegetatiana) VALUES
+INSERT INTO pizza (nombre, descripcion, precio, disponible, vegana, vegetariana) VALUES
 ('Margarita', 'Tomate, mozzarella y albahaca', 7.50, true, false, true),
 ('Pepperoni', 'Pepperoni, mozzarella y tomate', 8.00, true, false, false),
 ('Cuatro Quesos', 'Mozzarella, parmesano, gorgonzola, emmental', 8.50, true, false, true),

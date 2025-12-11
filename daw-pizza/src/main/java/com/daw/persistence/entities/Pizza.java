@@ -37,6 +37,6 @@ public class Pizza {
 	private boolean vegana;
 
 	@Column(columnDefinition = "BOOLEAN")
-	private boolean vegetatiana;
+	private boolean vegetariana;
 
 }

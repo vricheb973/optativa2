@@ -135,6 +135,7 @@ public class PedidoService {
 		}
 		
 		pedido.setTotal(total);
+		this.pedidoRepository.save(pedido);
 	}
 
 }

@@ -44,7 +44,7 @@ public class PizzaService {
 		pizzaBD.setNombre(pizza.getNombre());
 		pizzaBD.setPrecio(pizza.getPrecio());
 		pizzaBD.setVegana(pizza.isVegana());
-		pizzaBD.setVegetatiana(pizza.isVegetatiana());
+		pizzaBD.setVegetariana(pizza.isVegetariana());
 		
 		return this.pizzaRepository.save(pizzaBD);
 	}
