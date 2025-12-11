@@ -15,12 +15,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.daw.persistence.entities.Pedido;
-import com.daw.persistence.entities.PizzaPedido;
 import com.daw.services.PedidoService;
 import com.daw.services.dto.PedidoDTO;
 import com.daw.services.dto.PizzaPedidoInputDTO;
 import com.daw.services.exceptions.PedidoException;
 import com.daw.services.exceptions.PedidoNotFoundException;
+import com.daw.services.exceptions.PizzaPedidoNotFoundException;
 
 @RestController
 @RequestMapping("/pedidos")
@@ -100,6 +100,9 @@ public class PedidoController {
 		catch(PedidoNotFoundException ex) {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
 		}
+		catch(PizzaPedidoNotFoundException ex) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
+		}		
 	}
 	
 	//create
@@ -121,6 +124,9 @@ public class PedidoController {
 		catch(PedidoNotFoundException ex) {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
 		}
+		catch(PizzaPedidoNotFoundException ex) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
+		}		
 	}
 	//delete
 	@DeleteMapping("/{idPedido}/pizzas/{idPizzaPedido}")
@@ -132,6 +138,9 @@ public class PedidoController {
 		catch(PedidoNotFoundException ex) {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
 		}
+		catch(PizzaPedidoNotFoundException ex) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
+		}		
 	}
 	
 	

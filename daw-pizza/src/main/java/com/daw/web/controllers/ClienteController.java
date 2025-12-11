@@ -71,7 +71,7 @@ public class ClienteController {
 			this.clienteService.deleteById(idCliente);
 			return ResponseEntity.ok().build();
 		}
-		catch(PizzaNotFoundException ex) {
+		catch(ClienteNotFoundException ex) {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
 		}
 	}
