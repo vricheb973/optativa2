@@ -114,9 +114,9 @@ public class PedidoController {
 	}
 	//update
 	@PutMapping("/{idPedido}/pizzas/{idPizzaPedido}")
-	public ResponseEntity<?> update(@PathVariable int idPedido, @PathVariable int idPizzaPedido, @RequestBody PizzaPedidoInputDTO pizzaPedido){
+	public ResponseEntity<?> update(@PathVariable int idPedido, @PathVariable int idPizzaPedido, @RequestBody PizzaPedidoInputDTO dto){
 		try {
-			return ResponseEntity.status(HttpStatus.CREATED).body(this.pedidoService.updatePizzaPedido(idPedido, idPizzaPedido, pizzaPedido));
+			return ResponseEntity.status(HttpStatus.CREATED).body(this.pedidoService.updatePizzaPedido(idPedido, idPizzaPedido, dto));
 		}
 		catch(PedidoNotFoundException ex) {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());

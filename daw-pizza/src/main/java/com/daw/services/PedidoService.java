@@ -1,5 +1,6 @@
 package com.daw.services;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,6 +47,8 @@ public class PedidoService {
 
 	public PedidoDTO create(Pedido pedido) {
 		pedido.setId(0);
+		pedido.setFecha(LocalDateTime.now());
+		pedido.setTotal(0.0);
 
 		return PedidoMapper.toDTO(this.pedidoRepository.save(pedido));
 	}
@@ -94,7 +97,10 @@ public class PedidoService {
 			throw new PedidoNotFoundException("El ID indicado no existe. ");
 		}
 
-		return this.pizzaPedidoService.createDTO(dto);
+		PizzaPedidoOutputDTO dtoOutput = this.pizzaPedidoService.createDTO(dto);
+		this.recalcularTotal(idPedido);
+		
+		return dtoOutput;
 	}
 
 	// update
@@ -103,7 +109,10 @@ public class PedidoService {
 			throw new PedidoNotFoundException("El ID indicado no existe. ");
 		}
 
-		return this.pizzaPedidoService.updateDTO(idPizzaPedido, dto);
+		PizzaPedidoOutputDTO dtoOutput = this.pizzaPedidoService.updateDTO(idPizzaPedido, dto);
+		this.recalcularTotal(idPedido);
+		
+		return dtoOutput;
 	}
 	
 	// delete
@@ -113,10 +122,12 @@ public class PedidoService {
 		}
 
 		this.pizzaPedidoService.deleteById(idPizzaPedido);
+		this.recalcularTotal(idPedido);
 	}
 	
 	//Funciones auxiliares
-	public void recalcularTotal(Pedido pedido) {
+	private void recalcularTotal(int idPedido) {
+		Pedido pedido = this.findEntityById(idPedido);
 		double total = 0.0;
 		
 		for(PizzaPedidoOutputDTO pp : this.pizzaPedidoService.findByIdPedido(pedido.getId())) {
