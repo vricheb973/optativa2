@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.daw.persistence.entities.Pedido;
-import com.daw.persistence.entities.PizzaPedido;
 import com.daw.persistence.repositories.PedidoRepository;
 import com.daw.services.dto.PedidoDTO;
 import com.daw.services.dto.PizzaPedidoInputDTO;
@@ -31,7 +30,7 @@ public class PedidoService {
 
 	public PedidoDTO findById(int idPedido) {
 		if (!this.pedidoRepository.existsById(idPedido)) {
-			throw new ClienteNotFoundException("El ID indicado no existe. ");
+			throw new PedidoNotFoundException("El ID indicado no existe. ");
 		}
 
 		return PedidoMapper.toDTO(this.pedidoRepository.findById(idPedido).get());
@@ -39,7 +38,7 @@ public class PedidoService {
 
 	public Pedido findEntityById(int idPedido) {
 		if (!this.pedidoRepository.existsById(idPedido)) {
-			throw new ClienteNotFoundException("El ID indicado no existe. ");
+			throw new PedidoNotFoundException("El ID indicado no existe. ");
 		}
 
 		return this.pedidoRepository.findById(idPedido).get();
@@ -61,12 +60,12 @@ public class PedidoService {
 		pedidoBD.setMetodo(pedido.getMetodo());
 		pedidoBD.setNotas(pedido.getNotas());
 
-		return PedidoMapper.toDTO(this.pedidoRepository.save(pedido));
+		return PedidoMapper.toDTO(this.pedidoRepository.save(pedidoBD));
 	}
 
 	public void deleteById(int idPedido) {
 		if (!this.pedidoRepository.existsById(idPedido)) {
-			throw new ClienteNotFoundException("El ID indicado no existe. ");
+			throw new PedidoNotFoundException("El ID indicado no existe. ");
 		}
 
 		this.pedidoRepository.deleteById(idPedido);
@@ -118,7 +117,7 @@ public class PedidoService {
 	// delete
 	public void deletePizzaPedidoById(int idPedido, int idPizzaPedido) {
 		if (!this.pedidoRepository.existsById(idPedido)) {
-			throw new ClienteNotFoundException("El ID indicado no existe. ");
+			throw new PedidoNotFoundException("El ID indicado no existe. ");
 		}
 
 		this.pizzaPedidoService.deleteById(idPizzaPedido);

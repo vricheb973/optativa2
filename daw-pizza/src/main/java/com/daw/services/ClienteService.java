@@ -41,7 +41,7 @@ public class ClienteService {
 		clienteBD.setEmail(cliente.getEmail());
 		clienteBD.setTelefono(cliente.getTelefono());		
 		
-		return this.clienteRepository.save(cliente);
+		return this.clienteRepository.save(clienteBD);
 	}
 	
 	public void deleteById(int idCliente) {
