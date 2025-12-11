@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -41,5 +42,9 @@ public class Cliente {
 	@OneToMany(mappedBy = "cliente")
 	@JsonIgnore
 	private List<Pedido> pedidos;
+	
+	@OneToMany(mappedBy = "cliente", fetch = FetchType.LAZY)
+	@JsonIgnore
+	private List<Direccion> direcciones;
 	
 }

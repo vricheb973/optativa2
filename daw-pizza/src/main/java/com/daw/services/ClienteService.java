@@ -7,8 +7,9 @@ import org.springframework.stereotype.Service;
 
 import com.daw.persistence.entities.Cliente;
 import com.daw.persistence.repositories.ClienteRepository;
+import com.daw.services.dto.ClienteDTO;
 import com.daw.services.exceptions.ClienteNotFoundException;
-import com.daw.services.exceptions.PizzaNotFoundException;
+import com.daw.services.mappers.ClienteMapper;
 
 @Service
 public class ClienteService {
@@ -26,6 +27,18 @@ public class ClienteService {
 		}
 		
 		return this.clienteRepository.findById(idCliente).get();
+	}
+	
+	public ClienteDTO findDTOById(int idCliente) {
+		if(!this.clienteRepository.existsById(idCliente)) {
+			throw new ClienteNotFoundException("El ID indicado no existe. ");
+		}
+		
+		return ClienteMapper.toDto(this.clienteRepository.findById(idCliente).get());
+	}
+	
+	public boolean existsCliente(int idCliente) {
+		return this.clienteRepository.existsById(idCliente);
 	}
 	
 	public Cliente create(Cliente cliente) {
@@ -46,7 +59,7 @@ public class ClienteService {
 	
 	public void deleteById(int idCliente) {
 		if(!this.clienteRepository.existsById(idCliente)) {
-			throw new PizzaNotFoundException("El ID indicado no existe. ");
+			throw new ClienteNotFoundException("El ID indicado no existe. ");
 		}
 		
 		this.clienteRepository.deleteById(idCliente);

@@ -18,7 +18,6 @@ import com.daw.persistence.entities.Cliente;
 import com.daw.services.ClienteService;
 import com.daw.services.exceptions.ClienteException;
 import com.daw.services.exceptions.ClienteNotFoundException;
-import com.daw.services.exceptions.PizzaNotFoundException;
 
 @RestController
 @RequestMapping("/clientes")
@@ -35,7 +34,7 @@ public class ClienteController {
 	@GetMapping("/{idCliente}")
 	public ResponseEntity<?> findById(@PathVariable int idCliente){
 		try {
-			return ResponseEntity.ok(this.clienteService.findById(idCliente));
+			return ResponseEntity.ok(this.clienteService.findDTOById(idCliente));
 		}
 		catch(ClienteNotFoundException ex) {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
