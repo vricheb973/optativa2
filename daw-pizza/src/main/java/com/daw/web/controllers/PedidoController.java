@@ -18,8 +18,10 @@ import com.daw.persistence.entities.Pedido;
 import com.daw.services.PedidoService;
 import com.daw.services.dto.PedidoDTO;
 import com.daw.services.dto.PizzaPedidoInputDTO;
+import com.daw.services.exceptions.ClienteNotFoundException;
 import com.daw.services.exceptions.PedidoException;
 import com.daw.services.exceptions.PedidoNotFoundException;
+import com.daw.services.exceptions.PizzaNotFoundException;
 import com.daw.services.exceptions.PizzaPedidoNotFoundException;
 
 @RestController
@@ -47,12 +49,12 @@ public class PedidoController {
 	
 	@PostMapping
 	public ResponseEntity<?> create(@RequestBody Pedido pedido){
-//		try {
+		try {
 			return ResponseEntity.status(HttpStatus.CREATED).body(this.pedidoService.create(pedido));
-//		}
-//		catch(PizzaException ex) {
-//			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
-//		}
+		}
+		catch(ClienteNotFoundException ex) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
+		}
 	}
 	
 	@PutMapping("/{idPedido}")
@@ -114,19 +116,25 @@ public class PedidoController {
 		catch(PedidoNotFoundException ex) {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
 		}
+		catch(PizzaNotFoundException ex) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
+		}
 	}
 	//update
 	@PutMapping("/{idPedido}/pizzas/{idPizzaPedido}")
 	public ResponseEntity<?> update(@PathVariable int idPedido, @PathVariable int idPizzaPedido, @RequestBody PizzaPedidoInputDTO dto){
 		try {
-			return ResponseEntity.status(HttpStatus.CREATED).body(this.pedidoService.updatePizzaPedido(idPedido, idPizzaPedido, dto));
+			return ResponseEntity.status(HttpStatus.OK).body(this.pedidoService.updatePizzaPedido(idPedido, idPizzaPedido, dto));
 		}
 		catch(PedidoNotFoundException ex) {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
 		}
 		catch(PizzaPedidoNotFoundException ex) {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
-		}		
+		}	
+		catch(PizzaNotFoundException ex) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
+		}	
 	}
 	//delete
 	@DeleteMapping("/{idPedido}/pizzas/{idPizzaPedido}")

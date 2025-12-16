@@ -1,17 +1,19 @@
 package com.daw.services;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.daw.persistence.entities.Cliente;
 import com.daw.persistence.entities.Pedido;
+import com.daw.persistence.entities.PizzaPedido;
 import com.daw.persistence.repositories.PedidoRepository;
 import com.daw.services.dto.PedidoDTO;
 import com.daw.services.dto.PizzaPedidoInputDTO;
 import com.daw.services.dto.PizzaPedidoOutputDTO;
-import com.daw.services.exceptions.ClienteNotFoundException;
 import com.daw.services.exceptions.PedidoNotFoundException;
 import com.daw.services.mappers.PedidoMapper;
 
@@ -23,6 +25,9 @@ public class PedidoService {
 
 	@Autowired
 	private PizzaPedidoService pizzaPedidoService;
+	
+	@Autowired
+	private ClienteService clienteService;
 
 	public List<PedidoDTO> findAll() {
 		return PedidoMapper.toDTOsFuncional(this.pedidoRepository.findAll());
@@ -45,18 +50,27 @@ public class PedidoService {
 	}
 
 	public PedidoDTO create(Pedido pedido) {
+		Cliente cliente = this.clienteService.findById(pedido.getIdCliente());
+		
 		pedido.setId(0);
 		pedido.setFecha(LocalDateTime.now());
 		pedido.setTotal(0.0);
 
-		return PedidoMapper.toDTO(this.pedidoRepository.save(pedido));
+		pedido = this.pedidoRepository.save(pedido);
+		
+		pedido.setCliente(cliente);
+		pedido.setPizzaPedidos(new ArrayList<PizzaPedido>());
+		
+		return PedidoMapper.toDTO(pedido);
 	}
 
 	public PedidoDTO update(int idPedido, Pedido pedido) {
+		if(idPedido != pedido.getId()) {
+			throw new PedidoNotFoundException("El ID del path y del body no coinciden. ");
+		}
+		
 		Pedido pedidoBD = this.findEntityById(idPedido);
 		pedidoBD.setIdCliente(pedido.getIdCliente());
-		pedidoBD.setFecha(pedido.getFecha());
-		pedidoBD.setTotal(pedido.getTotal());
 		pedidoBD.setMetodo(pedido.getMetodo());
 		pedidoBD.setNotas(pedido.getNotas());
 
@@ -92,6 +106,9 @@ public class PedidoService {
 
 	// create
 	public PizzaPedidoOutputDTO createPizzaPedido(int idPedido, PizzaPedidoInputDTO dto) {
+		if(idPedido != dto.getIdPedido()) {
+			throw new PedidoNotFoundException("El ID del path y del body no coinciden. ");
+		}		
 		if (!this.pedidoRepository.existsById(idPedido)) {
 			throw new PedidoNotFoundException("El ID indicado no existe. ");
 		}
@@ -104,6 +121,9 @@ public class PedidoService {
 
 	// update
 	public PizzaPedidoOutputDTO updatePizzaPedido(int idPedido, int idPizzaPedido, PizzaPedidoInputDTO dto) {
+		if(idPedido != dto.getIdPedido()) {
+			throw new PedidoNotFoundException("El ID del path y del body no coinciden. ");
+		}	
 		if (!this.pedidoRepository.existsById(idPedido)) {
 			throw new PedidoNotFoundException("El ID indicado no existe. ");
 		}

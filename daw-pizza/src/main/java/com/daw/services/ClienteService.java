@@ -48,6 +48,10 @@ public class ClienteService {
 	}
 	
 	public Cliente update(int idCliente, Cliente cliente) {
+		if(idCliente != cliente.getId()) {
+			throw new ClienteNotFoundException("El ID del path y del body no coinciden. ");
+		}
+		
 		Cliente clienteBD = this.findById(idCliente);
 		clienteBD.setNombre(cliente.getNombre());
 		clienteBD.setDireccion(cliente.getDireccion());

@@ -78,10 +78,11 @@ public class PizzaPedidoService {
 	}
 	
 	public PizzaPedidoOutputDTO createDTO(PizzaPedidoInputDTO dto) {	
+		Pizza pizza = this.pizzaService.findById(dto.getIdPizza());
+		
 		PizzaPedido entity = PizzaPedidoMapper.toEntity(dto);
 		entity.setId(0);
-		
-		Pizza pizza = this.pizzaService.findById(entity.getIdPizza());
+
 		entity.setPrecio(entity.getCantidad() * pizza.getPrecio());
 		
 		//Cuando ejecutamos el save, no vienen las entidades relacionadas (pizza y pedido), por lo que
