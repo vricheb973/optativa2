@@ -13,62 +13,59 @@ import com.daw.services.mappers.ClienteMapper;
 
 @Service
 public class ClienteService {
-	
+
 	@Autowired
 	private ClienteRepository clienteRepository;
-	
-	public List<Cliente> findAll(){
+
+	public List<Cliente> findAll() {
 		return this.clienteRepository.findAll();
 	}
-	
+
 	public Cliente findById(int idCliente) {
-		if(!this.clienteRepository.existsById(idCliente)) {
+		if (!this.clienteRepository.existsById(idCliente)) {
 			throw new ClienteNotFoundException("El ID indicado no existe. ");
 		}
-		
+
 		return this.clienteRepository.findById(idCliente).get();
 	}
-	
+
 	public ClienteDTO findDTOById(int idCliente) {
-		if(!this.clienteRepository.existsById(idCliente)) {
+		if (!this.clienteRepository.existsById(idCliente)) {
 			throw new ClienteNotFoundException("El ID indicado no existe. ");
 		}
-		
+
 		return ClienteMapper.toDto(this.clienteRepository.findById(idCliente).get());
 	}
-	
+
 	public boolean existsCliente(int idCliente) {
 		return this.clienteRepository.existsById(idCliente);
 	}
-	
+
 	public Cliente create(Cliente cliente) {
 		cliente.setId(0);
-		
+
 		return this.clienteRepository.save(cliente);
 	}
-	
+
 	public Cliente update(int idCliente, Cliente cliente) {
-		if(idCliente != cliente.getId()) {
+		if (idCliente != cliente.getId()) {
 			throw new ClienteNotFoundException("El ID del path y del body no coinciden. ");
 		}
-		
+
 		Cliente clienteBD = this.findById(idCliente);
 		clienteBD.setNombre(cliente.getNombre());
-		clienteBD.setDireccion(cliente.getDireccion());
 		clienteBD.setEmail(cliente.getEmail());
-		clienteBD.setTelefono(cliente.getTelefono());		
-		
+		clienteBD.setTelefono(cliente.getTelefono());
+
 		return this.clienteRepository.save(clienteBD);
 	}
-	
+
 	public void deleteById(int idCliente) {
-		if(!this.clienteRepository.existsById(idCliente)) {
+		if (!this.clienteRepository.existsById(idCliente)) {
 			throw new ClienteNotFoundException("El ID indicado no existe. ");
 		}
-		
+
 		this.clienteRepository.deleteById(idCliente);
 	}
-	
-	
-	
+
 }

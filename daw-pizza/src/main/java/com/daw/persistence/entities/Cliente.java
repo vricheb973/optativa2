@@ -22,29 +22,26 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 public class Cliente {
-	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
-	
+
 	@Column(length = 30)
 	private String nombre;
-	
-	@Column(length = 100)
-	private String direccion;
 
 	@Column(length = 50)
 	private String email;
 
 	@Column(length = 20)
 	private String telefono;
-	
+
 	@OneToMany(mappedBy = "cliente")
 	@JsonIgnore
 	private List<Pedido> pedidos;
-	
+
 	@OneToMany(mappedBy = "cliente", fetch = FetchType.LAZY)
 	@JsonIgnore
 	private List<Direccion> direcciones;
-	
+
 }

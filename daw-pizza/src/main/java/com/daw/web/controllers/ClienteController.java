@@ -16,8 +16,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.daw.persistence.entities.Cliente;
 import com.daw.services.ClienteService;
-import com.daw.services.exceptions.ClienteException;
-import com.daw.services.exceptions.ClienteNotFoundException;
 
 @RestController
 @RequestMapping("/clientes")
@@ -25,54 +23,31 @@ public class ClienteController {
 
 	@Autowired
 	private ClienteService clienteService;
-	
+
 	@GetMapping
-	public ResponseEntity<List<Cliente>> list(){
+	public ResponseEntity<List<Cliente>> list() {
 		return ResponseEntity.ok(this.clienteService.findAll());
 	}
-	
+
 	@GetMapping("/{idCliente}")
-	public ResponseEntity<?> findById(@PathVariable int idCliente){
-		try {
-			return ResponseEntity.ok(this.clienteService.findDTOById(idCliente));
-		}
-		catch(ClienteNotFoundException ex) {
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
-		}
+	public ResponseEntity<?> findById(@PathVariable int idCliente) {
+		return ResponseEntity.ok(this.clienteService.findDTOById(idCliente));
 	}
-	
+
 	@PostMapping
-	public ResponseEntity<?> create(@RequestBody Cliente cliente){
-//		try {
-			return ResponseEntity.status(HttpStatus.CREATED).body(this.clienteService.create(cliente));
-//		}
-//		catch(PizzaException ex) {
-//			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
-//		}
+	public ResponseEntity<?> create(@RequestBody Cliente cliente) {
+		return ResponseEntity.status(HttpStatus.CREATED).body(this.clienteService.create(cliente));
 	}
-	
+
 	@PutMapping("/{idCliente}")
-	public ResponseEntity<?> update(@PathVariable int idCliente, @RequestBody Cliente cliente){
-		try {
-			return ResponseEntity.ok(this.clienteService.update(idCliente, cliente));
-		}
-		catch(ClienteNotFoundException ex) {
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
-		}
-		catch(ClienteException ex) {
-			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
-		}
+	public ResponseEntity<?> update(@PathVariable int idCliente, @RequestBody Cliente cliente) {
+		return ResponseEntity.ok(this.clienteService.update(idCliente, cliente));
 	}
-	
+
 	@DeleteMapping("/{idCliente}")
-	public ResponseEntity<?> delete(@PathVariable int idCliente){
-		try {
-			this.clienteService.deleteById(idCliente);
-			return ResponseEntity.ok().build();
-		}
-		catch(ClienteNotFoundException ex) {
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
-		}
+	public ResponseEntity<?> delete(@PathVariable int idCliente) {
+		this.clienteService.deleteById(idCliente);
+		return ResponseEntity.ok().build();
 	}
-	
+
 }

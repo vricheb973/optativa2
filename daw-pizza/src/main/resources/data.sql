@@ -49,3 +49,17 @@ INSERT INTO pizza_pedido (id_pizza, id_pedido, cantidad, precio) VALUES
 (8, 7, 1, 8.00),
 (9, 8, 2, 17.00),
 (10, 9, 1, 9.00);
+
+-- Inserciones en la tabla direccion
+INSERT INTO direccion (id_cliente, calle, numero, poblacion, activa) VALUES
+(1, 'Calle Mayor', '1', 'Madrid', true),
+(1, 'Av. de la Constitución', '45', 'Madrid', false),
+(2, 'Av. Sevilla', '5', 'Sevilla', true),
+(3, 'Plaza Sol', '7', 'Madrid', true),
+(4, 'Calle Luna', '8', 'Barcelona', true),
+(5, 'Calle Olivo', '3', 'Valencia', true),
+(6, 'Av. Madrid', '23', 'Zaragoza', true),
+(7, 'Calle Norte', '11', 'Bilbao', true),
+(8, 'Calle Oeste', '15', 'Málaga', true),
+(9, 'Av. Granada', '20', 'Granada', true),
+(10, 'Calle Sur', '21', 'Alicante', true);

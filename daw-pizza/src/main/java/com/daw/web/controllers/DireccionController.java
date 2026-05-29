@@ -16,9 +16,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.daw.persistence.entities.Direccion;
 import com.daw.services.DireccionService;
-import com.daw.services.exceptions.ClienteNotFoundException;
-import com.daw.services.exceptions.DireccionException;
-import com.daw.services.exceptions.DireccionNotFoundException;
 
 @RestController
 @RequestMapping("/direcciones")
@@ -34,53 +31,28 @@ public class DireccionController {
 
 	@GetMapping("/{idDireccion}")
 	public ResponseEntity<?> findById(@PathVariable int idDireccion) {
-		try {
-			return ResponseEntity.ok(this.direccionService.findById(idDireccion));
-		} catch (DireccionNotFoundException ex) {
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
-		}
+		return ResponseEntity.ok(this.direccionService.findById(idDireccion));
 	}
 
 	@PostMapping
 	public ResponseEntity<?> create(@RequestBody Direccion direccion) {
-		try {
-			return ResponseEntity.status(HttpStatus.CREATED).body(this.direccionService.create(direccion));
-		} catch (ClienteNotFoundException ex) {
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
-		}
+		return ResponseEntity.status(HttpStatus.CREATED).body(this.direccionService.create(direccion));
 	}
 
 	@PutMapping("/{idDireccion}")
 	public ResponseEntity<?> update(@PathVariable int idDireccion, @RequestBody Direccion direccion) {
-		try {
-			return ResponseEntity.ok(this.direccionService.update(idDireccion, direccion));
-		} catch (DireccionNotFoundException ex) {
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
-		} catch (DireccionException ex) {
-			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
-		}
+		return ResponseEntity.ok(this.direccionService.update(idDireccion, direccion));
 	}
 
 	@DeleteMapping("/{idDireccion}")
 	public ResponseEntity<?> delete(@PathVariable int idDireccion) {
-		try {
-			this.direccionService.delete(idDireccion);
-			return ResponseEntity.ok().build();
-		}
-		catch(DireccionNotFoundException ex) {
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
-		}
+		this.direccionService.delete(idDireccion);
+		return ResponseEntity.ok().build();
 	}
 
 	@PutMapping("/{idDireccion}/activa")
 	public ResponseEntity<?> marcarDesmarcarActiva(@PathVariable int idDireccion) {
-		try {
-			return ResponseEntity.ok(this.direccionService.marcarDesmarcarActivas(idDireccion));
-		} catch (DireccionNotFoundException ex) {
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
-		} catch (ClienteNotFoundException ex) {
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
-		}
+		return ResponseEntity.ok(this.direccionService.marcarDesmarcarActivas(idDireccion));
 	}
 
 }
