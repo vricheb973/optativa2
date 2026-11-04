@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.daw.persistence.entities.PedidoEntity;
-import com.daw.services.exceptions.PedidoService;
+import com.daw.services.PedidoService;
 
 import lombok.RequiredArgsConstructor;
 

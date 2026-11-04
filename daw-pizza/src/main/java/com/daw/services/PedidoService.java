@@ -1,4 +1,4 @@
-package com.daw.services.exceptions;
+package com.daw.services;
 
 import java.util.List;
 
