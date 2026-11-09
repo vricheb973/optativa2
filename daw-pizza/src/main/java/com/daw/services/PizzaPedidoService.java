@@ -4,8 +4,9 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
-import com.daw.persistence.entities.PizzaPedidoEntity;
 import com.daw.persistence.repositories.PizzaPedidoRepository;
+import com.daw.services.dtos.PizzaPedidoDto;
+import com.daw.services.mappers.PizzaPedidoMapper;
 
 import lombok.RequiredArgsConstructor;
 
@@ -15,8 +16,9 @@ public class PizzaPedidoService {
 
 	private final PizzaPedidoRepository pizzaPedidoRepository;
 	
-	public List<PizzaPedidoEntity> findAll(){
-		return this.pizzaPedidoRepository.findAll();
+	public List<PizzaPedidoDto> findAll(){
+		return  PizzaPedidoMapper.toDtos(this.pizzaPedidoRepository.findAll());
 	}
+	
 	
 }
