@@ -15,8 +15,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.daw.persistence.entities.PedidoEntity;
 import com.daw.services.PedidoService;
-import com.daw.services.exceptions.PedidoException;
-import com.daw.services.exceptions.PedidoNotFoundException;
 
 import lombok.RequiredArgsConstructor;
 
@@ -34,11 +32,7 @@ public class PedidoController {
 
 	@GetMapping("/{idPedido}")
 	public ResponseEntity<?> findById(@PathVariable long idPedido) {
-		try {
-			return ResponseEntity.ok(this.pedidoService.findById(idPedido));
-		} catch (PedidoNotFoundException ex) {
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
-		}
+		return ResponseEntity.ok(this.pedidoService.findById(idPedido));
 	}
 
 	@PostMapping
@@ -48,23 +42,13 @@ public class PedidoController {
 
 	@PutMapping("/{idPedido}")
 	public ResponseEntity<?> update(@PathVariable long idPedido, @RequestBody PedidoEntity pedido) {
-		try {
-			return ResponseEntity.ok(this.pedidoService.update(idPedido, pedido));
-		} catch (PedidoNotFoundException ex) {
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
-		} catch (PedidoException ex) {
-			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
-		}
+		return ResponseEntity.ok(this.pedidoService.update(idPedido, pedido));
 	}
 
 	@DeleteMapping("/{idPedido}")
 	public ResponseEntity<?> delete(@PathVariable long idPedido) {
-		try {
-			this.pedidoService.deleteById(idPedido);
-			return ResponseEntity.ok().build();
-		} catch (PedidoNotFoundException ex) {
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
-		}
+		this.pedidoService.deleteById(idPedido);
+		return ResponseEntity.ok().build();
 	}
 
 }

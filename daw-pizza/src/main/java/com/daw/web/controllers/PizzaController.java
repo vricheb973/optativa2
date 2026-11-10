@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.daw.persistence.entities.PizzaEntity;
 import com.daw.services.PizzaService;
 import com.daw.services.exceptions.PizzaException;
-import com.daw.services.exceptions.PizzaNotFoundException;
 
 import lombok.RequiredArgsConstructor;
 
@@ -34,11 +33,7 @@ public class PizzaController {
 
 	@GetMapping("/{idPizza}")
 	public ResponseEntity<?> findById(@PathVariable long idPizza) {
-		try {
-			return ResponseEntity.ok(this.pizzaService.findById(idPizza));
-		} catch (PizzaNotFoundException ex) {
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
-		}
+		return ResponseEntity.ok(this.pizzaService.findById(idPizza));
 	}
 
 	@PostMapping
@@ -48,24 +43,12 @@ public class PizzaController {
 
 	@PutMapping("/{idPizza}")
 	public ResponseEntity<?> update(@PathVariable long idPizza, @RequestBody PizzaEntity pizza) {
-		try {
-			return ResponseEntity.ok(this.pizzaService.update(idPizza, pizza));
-
-		} catch (PizzaNotFoundException ex) {
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
-		} catch (PizzaException ex) {
-			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
-		}
+		return ResponseEntity.ok(this.pizzaService.update(idPizza, pizza));
 	}
 
 	@DeleteMapping("/{idPizza}")
 	public ResponseEntity<?> delete(@PathVariable long idPizza) {
-		try {
-			this.pizzaService.deleteById(idPizza);
-			return ResponseEntity.ok().build();
-
-		} catch (PizzaNotFoundException ex) {
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
-		}
+		this.pizzaService.deleteById(idPizza);
+		return ResponseEntity.ok().build();
 	}
 }

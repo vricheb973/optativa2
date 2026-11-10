@@ -34,11 +34,7 @@ public class ClienteController {
 
 	@GetMapping("/{idCliente}")
 	public ResponseEntity<?> findById(@PathVariable long idCliente) {
-		try {
-			return ResponseEntity.ok(this.clienteService.findById(idCliente));
-		} catch (ClienteNotFoundException ex) {
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
-		}
+		return ResponseEntity.ok(this.clienteService.findById(idCliente));
 	}
 
 	@PostMapping
@@ -48,22 +44,12 @@ public class ClienteController {
 
 	@PutMapping("/{idCliente}")
 	public ResponseEntity<?> update(@PathVariable int idCliente, @RequestBody ClienteEntity cliente) {
-		try {
-			return ResponseEntity.ok(this.clienteService.update(idCliente, cliente));
-		} catch (ClienteNotFoundException ex) {
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
-		} catch (ClienteException ex) {
-			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
-		}
+		return ResponseEntity.ok(this.clienteService.update(idCliente, cliente));
 	}
 
 	@DeleteMapping("/{idCliente}")
 	public ResponseEntity<?> delete(@PathVariable int idCliente) {
-		try {
-			this.clienteService.deleteById(idCliente);
-			return ResponseEntity.ok().build();
-		} catch (ClienteNotFoundException ex) {
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
-		}
+		this.clienteService.deleteById(idCliente);
+		return ResponseEntity.ok().build();
 	}
 }

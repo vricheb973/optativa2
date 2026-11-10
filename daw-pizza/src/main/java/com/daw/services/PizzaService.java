@@ -28,7 +28,11 @@ public class PizzaService {
 		return this.pizzaRepository.findById(idPizza).get();
 	}
 	
-	public PizzaEntity create(PizzaEntity pizza) {
+	public PizzaEntity create(PizzaEntity pizza) {		
+		if(pizza.getDisponible() == null) {
+			pizza.setDisponible(true);
+		}
+		
 		pizza.setId(0L);
 		
 		return this.pizzaRepository.save(pizza);
@@ -41,7 +45,7 @@ public class PizzaService {
 		
 		PizzaEntity pizzaBD = this.findById(idPizza);
 		pizzaBD.setDescripcion(pizzaEntity.getDescripcion());
-		pizzaBD.setDisponible(pizzaEntity.isDisponible());
+		pizzaBD.setDisponible(pizzaEntity.getDisponible());
 		pizzaBD.setNombre(pizzaEntity.getNombre());
 		pizzaBD.setPrecio(pizzaEntity.getPrecio());
 		pizzaBD.setVegana(pizzaEntity.isVegana());

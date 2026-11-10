@@ -30,6 +30,8 @@ public class PedidoService {
 	}
 	
 	public PedidoEntity create(PedidoEntity pedido) {		
+		//Añadir restricciones para que no se pueda modificar la fecha del pedido ni el total.
+		
 		pedido.setId(0L);
 		pedido.setFecha(LocalDateTime.now());
 		pedido.setTotal(0.0);
