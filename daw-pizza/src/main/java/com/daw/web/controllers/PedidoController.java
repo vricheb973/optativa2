@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.daw.persistence.entities.PedidoEntity;
 import com.daw.services.PedidoService;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 @RestController
@@ -36,12 +37,12 @@ public class PedidoController {
 	}
 
 	@PostMapping
-	public ResponseEntity<?> create(@RequestBody PedidoEntity pedido) {
+	public ResponseEntity<?> create(@Valid @RequestBody PedidoEntity pedido) {
 		return ResponseEntity.status(HttpStatus.CREATED).body(this.pedidoService.create(pedido));
 	}
 
 	@PutMapping("/{idPedido}")
-	public ResponseEntity<?> update(@PathVariable long idPedido, @RequestBody PedidoEntity pedido) {
+	public ResponseEntity<?> update(@PathVariable long idPedido, @Valid @RequestBody PedidoEntity pedido) {
 		return ResponseEntity.ok(this.pedidoService.update(idPedido, pedido));
 	}
 

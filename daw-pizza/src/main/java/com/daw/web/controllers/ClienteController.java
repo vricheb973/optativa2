@@ -15,9 +15,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.daw.persistence.entities.ClienteEntity;
 import com.daw.services.ClienteService;
-import com.daw.services.exceptions.ClienteException;
-import com.daw.services.exceptions.ClienteNotFoundException;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 @RestController
@@ -38,12 +37,12 @@ public class ClienteController {
 	}
 
 	@PostMapping
-	public ResponseEntity<?> create(@RequestBody ClienteEntity cliente) {
+	public ResponseEntity<?> create(@Valid @RequestBody ClienteEntity cliente) {
 		return ResponseEntity.status(HttpStatus.CREATED).body(this.clienteService.create(cliente));
 	}
 
 	@PutMapping("/{idCliente}")
-	public ResponseEntity<?> update(@PathVariable int idCliente, @RequestBody ClienteEntity cliente) {
+	public ResponseEntity<?> update(@PathVariable int idCliente, @Valid @RequestBody ClienteEntity cliente) {
 		return ResponseEntity.ok(this.clienteService.update(idCliente, cliente));
 	}
 

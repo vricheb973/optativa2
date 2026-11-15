@@ -6,24 +6,31 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
 @Table(name = "pizza")
 @Getter
 @Setter
-@NoArgsConstructor
 public class PizzaEntity {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private long id;
+	private Long id;
 	private String nombre;
 	private String descripcion;
-	private double precio;
-	private boolean vegetariana;
-	private boolean vegana;
-	private Boolean disponible;	
+    private Double precio;
+    private Boolean vegetariana;
+    private Boolean vegana;
+    private Boolean disponible;
+    
+	public PizzaEntity() {
+		super();
+		this.disponible = true;
+		this.vegana = false;
+		this.vegetariana = false;
+	}
+    
+    
 
 }

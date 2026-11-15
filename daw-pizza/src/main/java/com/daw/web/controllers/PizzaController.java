@@ -15,8 +15,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.daw.persistence.entities.PizzaEntity;
 import com.daw.services.PizzaService;
-import com.daw.services.exceptions.PizzaException;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 @RestController
@@ -37,12 +37,12 @@ public class PizzaController {
 	}
 
 	@PostMapping
-	public ResponseEntity<?> create(@RequestBody PizzaEntity pizza) {
+	public ResponseEntity<?> create(@Valid @RequestBody PizzaEntity pizza) {
 		return ResponseEntity.status(HttpStatus.CREATED).body(this.pizzaService.create(pizza));
 	}
 
 	@PutMapping("/{idPizza}")
-	public ResponseEntity<?> update(@PathVariable long idPizza, @RequestBody PizzaEntity pizza) {
+	public ResponseEntity<?> update(@PathVariable long idPizza, @Valid @RequestBody PizzaEntity pizza) {
 		return ResponseEntity.ok(this.pizzaService.update(idPizza, pizza));
 	}
 
