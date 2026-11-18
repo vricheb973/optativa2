@@ -7,8 +7,10 @@ import org.springframework.validation.annotation.Validated;
 
 import com.daw.persistence.entities.ClienteEntity;
 import com.daw.persistence.repositories.ClienteRepository;
+import com.daw.services.dtos.ClienteDTO;
 import com.daw.services.exceptions.BusinessRuleException;
 import com.daw.services.exceptions.ResourceNotFoundException;
+import com.daw.services.mappers.ClienteMapper;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -19,50 +21,53 @@ import lombok.RequiredArgsConstructor;
 public class ClienteService {
 	
 	private final ClienteRepository clienteRepository;
+	private final ClienteMapper clienteMapper;
 	
-	public List<ClienteEntity> findAll(){
-		return this.clienteRepository.findAll();
+	public List<ClienteDTO> findAll(){
+		return this.clienteMapper.toDtos(this.clienteRepository.findAll());
 	}
 	
-	public ClienteEntity findById(long idCliente) {
+	public ClienteDTO findById(long idCliente) {
 		if (!this.clienteRepository.existsById(idCliente)) {
 			throw new ResourceNotFoundException("Cliente no encontrado con ID: " + idCliente);
 		}
 
-		return this.clienteRepository.findById(idCliente).get();
+		return this.clienteMapper.toDto(this.clienteRepository.findById(idCliente).get());
 	}
 	
-	public ClienteEntity create(@Valid ClienteEntity cliente) {
-		cliente.setId(null);
+	public ClienteDTO create(@Valid ClienteDTO dto) {
+		ClienteEntity entity = this.clienteMapper.toEntity(dto);
 		
-		if(this.clienteRepository.existsByEmail(cliente.getEmail())) {
-			throw new BusinessRuleException("Ya existe un cliente registrado con el email: " + cliente.getEmail());
+		entity.setId(null);
+		
+		if(this.clienteRepository.existsByEmail(entity.getEmail())) {
+			throw new BusinessRuleException("Ya existe un cliente registrado con el email: " + entity.getEmail());
 		}
-		if(this.clienteRepository.existsByTelefono(cliente.getTelefono())) {
-            throw new BusinessRuleException("Ya existe un cliente registrado con el teléfono: " + cliente.getTelefono());
+		if(this.clienteRepository.existsByTelefono(entity.getTelefono())) {
+            throw new BusinessRuleException("Ya existe un cliente registrado con el teléfono: " + entity.getTelefono());
         }
 
-		return this.clienteRepository.save(cliente);
+		return this.clienteMapper.toDto(this.clienteRepository.save(entity));
 	}
 	
-	public ClienteEntity update(int idCliente, @Valid ClienteEntity cliente) {
-		ClienteEntity clienteBD = this.findById(idCliente);
+	public ClienteDTO update(int idCliente, @Valid ClienteDTO dto) {
+		ClienteEntity clienteBD = this.findEntityById(idCliente);
 		
         // Validar email único si cambió
-        if (!cliente.getEmail().equalsIgnoreCase(clienteBD.getEmail()) && clienteRepository.existsByEmail(cliente.getEmail())) {
-            throw new BusinessRuleException("Ya existe otro cliente con el email: " + cliente.getEmail());
+        if (!dto.getEmail().equalsIgnoreCase(clienteBD.getEmail()) && clienteRepository.existsByEmail(dto.getEmail())) {
+            throw new BusinessRuleException("Ya existe otro cliente con el email: " + dto.getEmail());
         }
         // Validar teléfono único si cambió
-        if (!cliente.getTelefono().equals(clienteBD.getTelefono()) && clienteRepository.existsByTelefono(cliente.getTelefono())) {
-            throw new BusinessRuleException("Ya existe otro cliente con el teléfono: " + cliente.getTelefono());
+        if (!dto.getTelefono().equals(clienteBD.getTelefono()) && clienteRepository.existsByTelefono(dto.getTelefono())) {
+            throw new BusinessRuleException("Ya existe otro cliente con el teléfono: " + dto.getTelefono());
         }
 		
-		clienteBD.setNombre(cliente.getNombre());
-		clienteBD.setDireccion(cliente.getDireccion());
-		clienteBD.setEmail(cliente.getEmail());
-		clienteBD.setTelefono(cliente.getTelefono());
+		clienteBD.setNombre(dto.getNombre());
+		clienteBD.setDireccion(dto.getDireccion());
+		clienteBD.setEmail(dto.getEmail());
+		clienteBD.setTelefono(dto.getTelefono());
 
-		return this.clienteRepository.save(clienteBD);
+		return this.clienteMapper.toDto(this.clienteRepository.save(clienteBD));
 	}
 	
 	public void deleteById(long idCliente) {
@@ -71,6 +76,15 @@ public class ClienteService {
 		}
 
 		this.clienteRepository.deleteById(idCliente);
+	}
+	
+	//Métodos que devuelven entities
+	public ClienteEntity findEntityById(long idCliente) {
+		if (!this.clienteRepository.existsById(idCliente)) {
+			throw new ResourceNotFoundException("Cliente no encontrado con ID: " + idCliente);
+		}
+
+		return this.clienteRepository.findById(idCliente).get();
 	}
 	
 

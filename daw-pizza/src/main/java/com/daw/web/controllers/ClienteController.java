@@ -13,8 +13,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.daw.persistence.entities.ClienteEntity;
 import com.daw.services.ClienteService;
+import com.daw.services.dtos.ClienteDTO;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -27,27 +27,27 @@ public class ClienteController {
 	private final ClienteService clienteService;
 
 	@GetMapping
-	public ResponseEntity<List<ClienteEntity>> list() {
+	public ResponseEntity<List<ClienteDTO>> list() {
 		return ResponseEntity.ok(this.clienteService.findAll());
 	}
 
 	@GetMapping("/{idCliente}")
-	public ResponseEntity<ClienteEntity> findById(@PathVariable long idCliente) {
+	public ResponseEntity<ClienteDTO> findById(@PathVariable long idCliente) {
 		return ResponseEntity.ok(this.clienteService.findById(idCliente));
 	}
 
 	@PostMapping
-	public ResponseEntity<?> create(@Valid @RequestBody ClienteEntity cliente) {
-		return ResponseEntity.status(HttpStatus.CREATED).body(this.clienteService.create(cliente));
+	public ResponseEntity<ClienteDTO> create(@Valid @RequestBody ClienteDTO dto) {
+		return ResponseEntity.status(HttpStatus.CREATED).body(this.clienteService.create(dto));
 	}
 
 	@PutMapping("/{idCliente}")
-	public ResponseEntity<?> update(@PathVariable int idCliente, @Valid @RequestBody ClienteEntity cliente) {
-		return ResponseEntity.ok(this.clienteService.update(idCliente, cliente));
+	public ResponseEntity<ClienteDTO> update(@PathVariable int idCliente, @Valid @RequestBody ClienteDTO dto) {
+		return ResponseEntity.ok(this.clienteService.update(idCliente, dto));
 	}
 
 	@DeleteMapping("/{idCliente}")
-	public ResponseEntity<?> delete(@PathVariable int idCliente) {
+	public ResponseEntity<ClienteDTO> delete(@PathVariable int idCliente) {
 		this.clienteService.deleteById(idCliente);
 		return ResponseEntity.ok().build();
 	}
