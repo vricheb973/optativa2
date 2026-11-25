@@ -13,8 +13,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.daw.persistence.entities.PizzaEntity;
 import com.daw.services.PizzaService;
+import com.daw.services.dtos.PizzaDTO;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -27,7 +27,7 @@ public class PizzaController {
 	private final PizzaService pizzaService;
 
 	@GetMapping
-	public ResponseEntity<List<PizzaEntity>> list() {
+	public ResponseEntity<List<PizzaDTO>> list() {
 		return ResponseEntity.ok(this.pizzaService.findAll());
 	}
 
@@ -37,17 +37,17 @@ public class PizzaController {
 	}
 
 	@PostMapping
-	public ResponseEntity<?> create(@Valid @RequestBody PizzaEntity pizza) {
+	public ResponseEntity<PizzaDTO> create(@Valid @RequestBody PizzaDTO pizza) {
 		return ResponseEntity.status(HttpStatus.CREATED).body(this.pizzaService.create(pizza));
 	}
 
 	@PutMapping("/{idPizza}")
-	public ResponseEntity<?> update(@PathVariable long idPizza, @Valid @RequestBody PizzaEntity pizza) {
+	public ResponseEntity<PizzaDTO> update(@PathVariable long idPizza, @Valid @RequestBody PizzaDTO pizza) {
 		return ResponseEntity.ok(this.pizzaService.update(idPizza, pizza));
 	}
 
 	@DeleteMapping("/{idPizza}")
-	public ResponseEntity<?> delete(@PathVariable long idPizza) {
+	public ResponseEntity<PizzaDTO> delete(@PathVariable long idPizza) {
 		this.pizzaService.deleteById(idPizza);
 		return ResponseEntity.ok().build();
 	}

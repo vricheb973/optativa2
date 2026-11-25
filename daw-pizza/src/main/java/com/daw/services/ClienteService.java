@@ -50,8 +50,9 @@ public class ClienteService {
 		return this.clienteMapper.toDto(this.clienteRepository.save(entity));
 	}
 	
-	public ClienteDTO update(int idCliente, @Valid ClienteDTO dto) {
-		ClienteEntity clienteBD = this.findEntityById(idCliente);
+	public ClienteDTO update(long idCliente, @Valid ClienteDTO dto) {
+		ClienteEntity clienteBD = this.clienteRepository.findById(idCliente)
+				.orElseThrow(() -> new ResourceNotFoundException("Cliente no encontrado con ID: " + idCliente)); 
 		
         // Validar email único si cambió
         if (!dto.getEmail().equalsIgnoreCase(clienteBD.getEmail()) && clienteRepository.existsByEmail(dto.getEmail())) {
@@ -76,15 +77,6 @@ public class ClienteService {
 		}
 
 		this.clienteRepository.deleteById(idCliente);
-	}
-	
-	//Métodos que devuelven entities
-	public ClienteEntity findEntityById(long idCliente) {
-		if (!this.clienteRepository.existsById(idCliente)) {
-			throw new ResourceNotFoundException("Cliente no encontrado con ID: " + idCliente);
-		}
-
-		return this.clienteRepository.findById(idCliente).get();
 	}
 	
 

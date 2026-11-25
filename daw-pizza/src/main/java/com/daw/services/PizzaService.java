@@ -7,7 +7,9 @@ import org.springframework.validation.annotation.Validated;
 
 import com.daw.persistence.entities.PizzaEntity;
 import com.daw.persistence.repositories.PizzaRepository;
+import com.daw.services.dtos.PizzaDTO;
 import com.daw.services.exceptions.ResourceNotFoundException;
+import com.daw.services.mappers.PizzaMapper;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -18,46 +20,50 @@ import lombok.RequiredArgsConstructor;
 public class PizzaService {
 	
 	private final PizzaRepository pizzaRepository;
+	private final PizzaMapper pizzaMapper;
 	
-	public List<PizzaEntity> findAll(){
-		return this.pizzaRepository.findAll();
+	public List<PizzaDTO> findAll(){
+		return this.pizzaMapper.toDtos(this.pizzaRepository.findAll());
 	}
 	
-	public PizzaEntity findById(long idPizza) {
+	public PizzaDTO findById(long idPizza) {
 		if(!this.pizzaRepository.existsById(idPizza)) {
 			throw new ResourceNotFoundException("Pizza no encontrada con ID: " + idPizza);
 		}
 		
-		return this.pizzaRepository.findById(idPizza).get();
+		return this.pizzaMapper.toDto(this.pizzaRepository.findById(idPizza).get());
 	}
 	
-	public PizzaEntity create(@Valid PizzaEntity pizza) {		
-		if(pizza.getDisponible() == null) {
-			pizza.setDisponible(true);
+	public PizzaDTO create(@Valid PizzaDTO dto) {		
+		if(dto.getDisponible() == null) {
+			dto.setDisponible(true);
 		}	
-		if(pizza.getVegana() == null) {
-			pizza.setVegana(false);
+		if(dto.getVegana() == null) {
+			dto.setVegana(false);
 		}	
-		if(pizza.getVegetariana() == null) {
-			pizza.setVegetariana(false);
+		if(dto.getVegetariana() == null) {
+			dto.setVegetariana(false);
 		}
 		
-		pizza.setId(null);
+		PizzaEntity entity = this.pizzaMapper.toEntity(dto);
+		entity.setId(null);
 		
-		return this.pizzaRepository.save(pizza);
+		return this.pizzaMapper.toDto(this.pizzaRepository.save(entity));
 	}
 	
-	public PizzaEntity update(long idPizza, @Valid PizzaEntity pizzaEntity) {		
-		PizzaEntity pizzaBD = this.findById(idPizza);
+	public PizzaDTO update(long idPizza, @Valid PizzaDTO inputDto) {		
 		
-		pizzaBD.setDescripcion(pizzaEntity.getDescripcion());
-		pizzaBD.setDisponible(pizzaEntity.getDisponible());
-		pizzaBD.setNombre(pizzaEntity.getNombre());
-		pizzaBD.setPrecio(pizzaEntity.getPrecio());
-		pizzaBD.setVegana(pizzaEntity.getVegana());
-		pizzaBD.setVegetariana(pizzaEntity.getVegetariana());
+		PizzaEntity pizzaBD = this.pizzaRepository.findById(idPizza)
+				.orElseThrow(() -> new ResourceNotFoundException("Pizza no encontrada con ID: " + idPizza));
 		
-		return this.pizzaRepository.save(pizzaBD);
+		pizzaBD.setDescripcion(inputDto.getDescripcion());
+		pizzaBD.setDisponible(inputDto.getDisponible());
+		pizzaBD.setNombre(inputDto.getNombre());
+		pizzaBD.setPrecio(inputDto.getPrecio());
+		pizzaBD.setVegana(inputDto.getVegana());
+		pizzaBD.setVegetariana(inputDto.getVegetariana());
+		
+		return this.pizzaMapper.toDto(this.pizzaRepository.save(pizzaBD));
 	}
 	
 	public void deleteById(long idPizza) {

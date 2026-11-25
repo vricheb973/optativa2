@@ -4,9 +4,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Component;
 
-import com.daw.persistence.entities.ClienteEntity;
 import com.daw.persistence.entities.PedidoEntity;
-import com.daw.services.dtos.PedidoInputDTO;
 import com.daw.services.dtos.PedidoOutputDTO;
 
 import lombok.RequiredArgsConstructor;
@@ -38,22 +36,22 @@ public class PedidoMapper {
 		return dto;
 	}
 	
-	//Método de entrada (genera un entity)
-	public PedidoEntity toEntity(PedidoInputDTO dto) {
-		if(dto == null) {
-			return null;
-		}
-		
-		ClienteEntity cliente = new ClienteEntity();
-		cliente.setId(dto.getClienteId());
-		
-		PedidoEntity entity = new PedidoEntity();
-		entity.setMetodo(dto.getMetodo());
-		entity.setNotas(dto.getNotas());
-		entity.setCliente(cliente);
-
-		return entity;
-	}
+//	//Método de entrada (genera un entity)
+//	public PedidoEntity toEntity(PedidoInputDTO dto) {
+//		if(dto == null) {
+//			return null;
+//		}
+//		
+//		ClienteEntity cliente = new ClienteEntity();
+//		cliente.setId(dto.getClienteId());
+//		
+//		PedidoEntity entity = new PedidoEntity();
+//		entity.setMetodo(dto.getMetodo());
+//		entity.setNotas(dto.getNotas());
+//		entity.setCliente(cliente);
+//
+//		return entity;
+//	}
 	
 	public List<PedidoOutputDTO> toDtos(List<PedidoEntity> entities) {
 		return entities.stream()
@@ -61,12 +59,12 @@ public class PedidoMapper {
 				.toList();
 	}
 	
-	public List<PedidoEntity> toEntities(List<PedidoInputDTO> dtos) {
-		return dtos.stream()
-				.map(p -> this.toEntity(p))
-				.toList();
-	}
-	
+//	public List<PedidoEntity> toEntities(List<PedidoInputDTO> dtos) {
+//		return dtos.stream()
+//				.map(p -> this.toEntity(p))
+//				.toList();
+//	}
+//	
 	
 
 }
